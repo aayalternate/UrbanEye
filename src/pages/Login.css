@@ -1,0 +1,118 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.login-card {
+    background: var(--card-bg, #ffffff);
+    padding: 40px;
+    border-radius: var(--border-radius-lg, 16px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-main, #1a1a1a);
+    margin-bottom: 8px;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    color: var(--text-muted, #666666);
+    margin-bottom: 30px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--text-main, #1a1a1a);
+}
+
+.role-selector {
+    display: flex;
+    gap: 10px;
+}
+
+.role-btn {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--card-placeholder, #d9d9d9);
+    background: transparent;
+    border-radius: var(--border-radius-md, 12px);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-main);
+    transition: all 0.2s ease;
+}
+
+.role-btn.active {
+    background: var(--purple-accent, #8b00cc);
+    color: white;
+    border-color: var(--purple-accent, #8b00cc);
+}
+
+.login-form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--card-placeholder, #d9d9d9);
+    border-radius: var(--border-radius-md, 12px);
+    font-size: 14px;
+    outline: none;
+    background-color: transparent;
+    color: var(--text-main);
+    transition: border-color 0.2s;
+}
+
+.login-form select:focus {
+    border-color: var(--purple-accent, #8b00cc);
+}
+
+.login-submit-btn {
+    background: var(--purple-accent, #8b00cc);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: var(--border-radius-md, 12px);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    margin-top: 10px;
+}
+
+.login-submit-btn:hover {
+    background: var(--purple-hover, #7a00b3);
+}
+
+.slide-down {
+    animation: slideDown 0.3s ease-out forwards;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

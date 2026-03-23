@@ -1,0 +1,102 @@
+.admin-layout {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    align-items: stretch;
+    min-height: calc(100vh - 120px);
+}
+
+.priority-sidebar {
+    width: 250px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    flex-shrink: 0;
+}
+
+.admin-main-area {
+    flex-grow: 1;
+}
+
+.sidebar-title {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.priority-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.priority-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background-color: var(--background);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.priority-list li:hover {
+    background-color: var(--grey-100);
+}
+
+.priority-list li.active {
+    background-color: rgba(69, 10, 226, 0.05); /* very light purple */
+    border-color: var(--purple-accent);
+}
+
+.priority-list li.high-priority.active {
+    background-color: rgba(231, 76, 60, 0.08);
+    border-color: #e74c3c;
+}
+
+.priority-list li.low-priority.active {
+    background-color: rgba(46, 204, 113, 0.08);
+    border-color: #2ecc71;
+}
+
+.priority-label {
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.priority-count {
+    background-color: var(--grey-200);
+    color: var(--text-dark);
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-weight: 600;
+}
+
+.priority-list li.high-priority .priority-count {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #c0392b;
+}
+
+.priority-list li.low-priority .priority-count {
+    background-color: rgba(46, 204, 113, 0.2);
+    color: #27ae60;
+}
+
+@media (max-width: 768px) {
+    .admin-layout {
+        flex-direction: column;
+    }
+    .priority-sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}

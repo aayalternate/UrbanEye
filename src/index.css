@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --bg-color: #383838;
+  --card-bg: #ffffff;
+  --text-main: #1a1a1a;
+  --text-muted: #666666;
+  --purple-accent: #8b00cc;
+  --purple-hover: #7a00b3;
+  --card-placeholder: #d9d9d9;
+  --border-radius-lg: 16px;
+  --border-radius-md: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  /* Adding a deep, rich gradient background for a modern feel */
+  background: linear-gradient(135deg, #1f1f1f 0%, #383838 50%, #2a2a2a 100%);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+#root {
+  width: 100%;
+  max-width: 1200px;
+  height: calc(100vh - 30px);
+  min-height: 500px;
+
+  /* Slightly translucent background to let the body gradient subtly influence the card edges */
+  background-color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border-radius: var(--border-radius-lg);
+  /* Soft outer drop-shadow + subtle inner highlight for depth (glassmorphism/neumorphism blend) */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 8px;
+    /* Even smaller padding on mobile */
+  }
+
+  #root {
+    height: calc(100vh - 16px);
+    border-radius: var(--border-radius-md);
+  }
+}
+
+/* Scrollbar styling for a premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cccccc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #aaaaaa;
+}
