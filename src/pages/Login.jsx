@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
 import './Login.css';
+import { login as apiLogin } from '../api/client';
 
 function Login({ onLogin }) {
-    const [role, setRole] = useState('user');
-    const [department, setDepartment] = useState('');
-    const [level, setLevel] = useState('Panchayath');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onLogin(role, department, level);
+        setError('');
+        try {
+            const data = await apiLogin(username, password);
+            onLogin(data);
+        } catch (err) {
+            setError(err.message);
+        }
     };
 
     return (
@@ -19,64 +26,38 @@ function Login({ onLogin }) {
                     <p className="login-subtitle">Sign in to your account</p>
                 </div>
                 <form onSubmit={handleSubmit} className="login-form">
+                    {error && <div style={{ color: '#ff4444', marginBottom: '15px', textAlign:'center', backgroundColor: '#ffecec', padding:'10px', borderRadius:'8px', fontSize: '0.9rem' }}>{error}</div>}
                     <div className="input-group">
-                        <label>Login As:</label>
-                        <div className="role-selector">
-                            <button
-                                type="button"
-                                className={`role-btn ${role === 'user' ? 'active' : ''}`}
-                                onClick={() => setRole('user')}
-                            >
-                                User
-                            </button>
-                            <button
-                                type="button"
-                                className={`role-btn ${role === 'admin' ? 'active' : ''}`}
-                                onClick={() => setRole('admin')}
-                            >
-                                Admin
-                            </button>
-                        </div>
+                        <label>Username</label>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                            placeholder="e.g. user1, admin"
+                            style={{ width: '100%', padding: '12px', marginTop: '8px', boxSizing: 'border-box', border: '1px solid #ddd', borderRadius: '8px' }}
+                        />
                     </div>
-
-                    {role === 'admin' && (
-                        <>
-                            <div className="input-group slide-down">
-                                <label htmlFor="admin-dept">Department</label>
-                                <select
-                                    id="admin-dept"
-                                    value={department}
-                                    onChange={(e) => setDepartment(e.target.value)}
-                                    required
-                                >
-                                    <option value="" disabled>Select Department</option>
-                                    <option value="Health">Health Department</option>
-                                    <option value="Roads">Road & Safety</option>
-                                    <option value="Water">Water & Sanitation</option>
-                                    <option value="Electricity">Electricity Board</option>
-                                    <option value="Other">Other Public Departments</option>
-                                </select>
-                            </div>
-
-                            <div className="input-group slide-down">
-                                <label htmlFor="admin-level">Admin Level</label>
-                                <select
-                                    id="admin-level"
-                                    value={level}
-                                    onChange={(e) => setLevel(e.target.value)}
-                                    required
-                                >
-                                    <option value="Panchayath">Panchayath (Level 1)</option>
-                                    <option value="District">District (Level 2)</option>
-                                    <option value="State">State (Level 3)</option>
-                                </select>
-                            </div>
-                        </>
-                    )}
-
-                    <button type="submit" className="login-submit-btn">
+                    <div className="input-group slide-down">
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            placeholder="e.g. pass1, adminpassword"
+                            style={{ width: '100%', padding: '12px', marginTop: '8px', boxSizing: 'border-box', border: '1px solid #ddd', borderRadius: '8px' }}
+                        />
+                    </div>
+                    
+                    <button type="submit" className="login-submit-btn" style={{marginTop: '20px'}}>
                         Sign In
                     </button>
+                    
+                    <div style={{marginTop: '20px', fontSize: '0.8rem', color: '#666', textAlign: 'center'}}>
+                        Simulate multiple users: <br/>
+                        <b>user1</b> (pass1) • <b>user2</b> (pass2) • <b>admin</b> (adminpassword)
+                    </div>
                 </form>
             </div>
         </div>
