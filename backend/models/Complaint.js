@@ -34,6 +34,14 @@ const complaintSchema = mongoose.Schema({
   clusterId: {
     type: String,
   },
+  level: {
+    type: String,
+    enum: ['Panchayath', 'Panchayat', 'District', 'State'],
+    default: 'Panchayath',
+  },
+  passedFrom: {
+    type: String,
+  },
 }, {
   timestamps: true,
 });

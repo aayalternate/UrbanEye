@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import ComplaintGrid from '../components/ComplaintGrid';
 import AdminComplaintDetailModal from '../components/AdminComplaintDetailModal';
+import { escalateComplaint } from '../api/client';
 import './AdminDashboard.css';
 
 function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
@@ -21,9 +22,10 @@ function AdminDashboard({ complaints, setComplaints, activeTab, onTabChange, adm
     const [selectedComplaint, setSelectedComplaint] = useState(null);
     const [selectedPriority, setSelectedPriority] = useState('All');
 
-    // Filter complaints strictly based on the Admin's level AND department
+    // Filter complaints based on the Admin's level AND department
     const filteredComplaints = complaints.filter(
-        (c) => c.department === adminDept && c.level === adminLevel
+        (c) => (adminDept === 'All' || c.department === adminDept) && 
+               (c.level === adminLevel || (adminLevel === 'Panchayat' && c.level === 'Panchayath') || (adminLevel === 'All'))
     );
 
     // Compute Priority and Combine Complaints
@@ -97,7 +99,7 @@ function AdminDashboard({ complaints, setComplaints, activeTab, onTabChange, adm
         setSelectedComplaint(complaint);
     };
 
-    const handleEscalate = (id) => {
+    const handleEscalate = async (id) => {
         let escalateIds = [];
         
         const clusterComplaint = processedComplaints.find(c => c.id === id);
@@ -107,18 +109,25 @@ function AdminDashboard({ complaints, setComplaints, activeTab, onTabChange, adm
             escalateIds = [id];
         }
 
-        const nextLevel = adminLevel === 'Panchayath' ? 'District' : (adminLevel === 'District' ? 'State' : 'State');
+        const nextLevel = (adminLevel === 'Panchayath' || adminLevel === 'Panchayat') ? 'District' : (adminLevel === 'District' ? 'State' : 'State');
         
-        setComplaints((prevComplaints) => {
-            return prevComplaints.map((c) => {
-                if (escalateIds.includes(c.id)) {
-                    return { ...c, level: nextLevel, passedFrom: adminLevel };
-                }
-                return c;
+        try {
+            await Promise.all(escalateIds.map(compId => escalateComplaint(compId, nextLevel, adminLevel)));
+            
+            setComplaints((prevComplaints) => {
+                return prevComplaints.map((c) => {
+                    if (escalateIds.includes(c.id)) {
+                        return { ...c, level: nextLevel, passedFrom: adminLevel };
+                    }
+                    return c;
+                });
             });
-        });
-        
-        alert(`Complaint(s) passed to ${nextLevel} hierarchy.`);
+            
+            alert(`Complaint(s) passed to ${nextLevel} hierarchy.`);
+        } catch (error) {
+            console.error('Failed to escalate complaint(s):', error);
+            alert('Failed to escalate complaint(s). Please try again later.');
+        }
     };
 
     return (

@@ -15,6 +15,13 @@ const userSchema = mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  level: {
+    type: String,
+    enum: ['State', 'District', 'Panchayat', 'Panchayath', 'All'],
+  },
+  department: {
+    type: String,
+  },
 }, {
   timestamps: true,
 });

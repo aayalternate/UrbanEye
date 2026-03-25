@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = 'http://localhost:5001/api';
 
 const getAuthHeader = () => {
     const token = localStorage.getItem('token');
@@ -44,5 +44,18 @@ export const createComplaint = async (complaintData) => {
         body: JSON.stringify(complaintData)
     });
     if (!res.ok) throw new Error('Failed to create complaint');
+    return res.json();
+};
+
+export const escalateComplaint = async (id, level, passedFrom) => {
+    const res = await fetch(`${BASE_URL}/complaints/${id}/escalate`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            ...getAuthHeader()
+        },
+        body: JSON.stringify({ level, passedFrom })
+    });
+    if (!res.ok) throw new Error('Failed to escalate complaint');
     return res.json();
 };

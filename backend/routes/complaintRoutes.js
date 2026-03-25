@@ -52,4 +52,25 @@ router.get('/admin', protect, admin, async (req, res) => {
   }
 });
 
+// @route   PUT /api/complaints/:id/escalate
+// @desc    Update complaint level (escalate)
+// @access  Private (Admin)
+router.put('/:id/escalate', protect, admin, async (req, res) => {
+  try {
+    const { level, passedFrom } = req.body;
+    const complaint = await Complaint.findById(req.params.id);
+
+    if (complaint) {
+      complaint.level = level || complaint.level;
+      complaint.passedFrom = passedFrom || complaint.passedFrom;
+      const updatedComplaint = await complaint.save();
+      res.json(updatedComplaint);
+    } else {
+      res.status(404).json({ message: 'Complaint not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+});
+
 module.exports = router;

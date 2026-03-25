@@ -28,6 +28,11 @@ function App() {
         setUser(parsedUser);
         loadComplaints(parsedUser.role);
         
+        if (parsedUser.role === 'admin') {
+            setAdminDept(parsedUser.department || 'All');
+            setAdminLevel(parsedUser.level || 'State');
+        }
+        
         // Only redirect if on login page, otherwise let them stay where they are
         if (location.pathname === '/login' || location.pathname === '/') {
             navigate(parsedUser.role === 'admin' ? '/admin' : '/user');
@@ -58,9 +63,9 @@ function App() {
       const newComplaint = await createComplaint({
         title: heading,
         description: text,
-        image: media,
+        image: media && media.length > 0 ? media[0].preview : '',
         category: department,
-        location: location || { lat: 0, lng: 0, address: 'Unknown' }, // Fallback if no location
+        location: location ? { lat: location.lat, lng: location.lng, address: location.address || 'Selected on map' } : { lat: 0, lng: 0, address: 'Unknown' }, // Fallback if no location
       });
       // The API returns the MongoDB document `_id`. Map it so frontend components using `id` don't break.
       const transformed = { ...newComplaint, id: newComplaint._id };
@@ -73,9 +78,20 @@ function App() {
 
   const handleLogin = (data) => {
     localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify({ username: data.username, role: data.role }));
+    localStorage.setItem('user', JSON.stringify({ 
+        username: data.username, 
+        role: data.role,
+        department: data.department,
+        level: data.level
+    }));
     setUserRole(data.role);
     setUser({ username: data.username, role: data.role });
+    
+    if (data.role === 'admin') {
+      setAdminDept(data.department || 'All');
+      setAdminLevel(data.level || 'State');
+    }
+
     loadComplaints(data.role);
 
     if (data.role === 'admin') {
@@ -90,6 +106,8 @@ function App() {
     localStorage.removeItem('user');
     setUserRole(null);
     setUser(null);
+    setAdminDept('All');
+    setAdminLevel('State');
     setComplaints([]);
     navigate('/login');
   };
