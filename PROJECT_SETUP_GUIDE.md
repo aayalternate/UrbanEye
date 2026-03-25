@@ -398,8 +398,48 @@ Cards and buttons feel "alive" because we tell CSS to smoothly transition their 
 
 ---
 
+## 🗄️ Step 8: The Node.js & MongoDB Backend
+
+As the application grew, we added a real backend to save complaints permanently, handle multi-user authentication, and provide admin dashboards.
+The backend lives inside the `backend/` folder. It uses **Express** (a web framework for Node.js) and **MongoDB** (a NoSQL database).
+
+### 1. Database Setup
+You need [MongoDB](https://www.mongodb.com/try/download/community) installed and running locally on your machine.
+In the `backend/` directory, there is a `.env` file that tells the server how to connect to the database securely:
+```env
+PORT=5001
+MONGODB_URI=mongodb://127.0.0.1:27017/urbaneye
+JWT_SECRET=supersecretkey_change_in_production
+```
+
+### 2. User Authentication & Roles
+Our application now supports logging in with different roles. We include an automatic seeder that creates default accounts for testing:
+*   **Admin Dashboard User:** Username `admin1` / Password `pass1` (Can view all complaints, see complaint clusters, and pass complaints to higher hierarchies like District or State).
+*   **Standard User:** Username `user1` / Password `pass1` (Can only create and view their own complaints).
+
+### 3. Starting the Full Stack App
+Instead of just running the frontend, you now need to run **both** servers simultaneously in two separate terminal windows.
+
+**Terminal 1 (The Backend):**
+```bash
+cd backend
+npm install
+node server.js
+```
+*(The backend will start and connect to MongoDB on `http://localhost:5001`)*
+
+**Terminal 2 (The Frontend):**
+```bash
+# Ensure you are in the root project folder
+npm install
+npm run dev
+```
+*(The frontend will start on your local Vite port, usually `http://localhost:5173`)*
+
+---
+
 ## 🎉 Conclusion
 
-By combining React's **State**, Component **Props**, JavaScript `fetch()` requests, File Blob URLs, and modern CSS, you now have a complete, robust, premium web application!
+By combining React's **State**, Component **Props**, an **Express/MongoDB** backend, and modern UI practices, you now have a complete, robust, premium full-stack application!
 
-Whenever you want to run this code on any computer, just make sure Node.js is installed, open the terminal in the folder, type `npm install` (to download the libraries), and then `npm run dev` to start the Magic!
+Welcome to the world of modern web development!
