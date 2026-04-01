@@ -42,6 +42,12 @@ const complaintSchema = mongoose.Schema({
   passedFrom: {
     type: String,
   },
+  resolutionNote: {
+    type: String,
+  },
+  resolutionImage: {
+    type: String,
+  },
 }, {
   timestamps: true,
 });

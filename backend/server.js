@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const complaintRoutes = require('./routes/complaintRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 const seedUsers = require('./seed');
 
 // Connect to database
@@ -16,11 +17,12 @@ const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // Increased for base64 images
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/complaints', complaintRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Root Route
 app.get('/', (req, res) => {

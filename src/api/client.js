@@ -59,3 +59,33 @@ export const escalateComplaint = async (id, level, passedFrom) => {
     if (!res.ok) throw new Error('Failed to escalate complaint');
     return res.json();
 };
+
+export const updateComplaintStatus = async (id, status, note, image) => {
+    const res = await fetch(`${BASE_URL}/complaints/${id}/status`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            ...getAuthHeader()
+        },
+        body: JSON.stringify({ status, note, image })
+    });
+    if (!res.ok) throw new Error('Failed to update complaint status');
+    return res.json();
+};
+
+export const fetchNotifications = async () => {
+    const res = await fetch(`${BASE_URL}/notifications`, {
+        headers: getAuthHeader()
+    });
+    if (!res.ok) throw new Error('Failed to fetch notifications');
+    return res.json();
+};
+
+export const markNotificationRead = async (id) => {
+    const res = await fetch(`${BASE_URL}/notifications/${id}/read`, {
+        method: 'PUT',
+        headers: getAuthHeader()
+    });
+    if (!res.ok) throw new Error('Failed to mark notification');
+    return res.json();
+};

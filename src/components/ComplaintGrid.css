@@ -1,19 +1,22 @@
 .complaint-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    padding: 32px;
+    gap: 20px;
+    padding: 24px;
     width: 100%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .complaint-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        padding: 20px;
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 540px) {
     .complaint-grid {
         grid-template-columns: 1fr;
+        padding: 16px;
     }
 }

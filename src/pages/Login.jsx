@@ -7,18 +7,19 @@ function Login({ onLogin }) {
     const [password, setPassword] = useState('');
     const [isAdminLogin, setIsAdminLogin] = useState(false);
     const [department, setDepartment] = useState('All');
-    const [level, setLevel] = useState('Panchayat'); // Changed default to Panchayat
+    const [level, setLevel] = useState('Panchayat');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setIsLoading(true);
         
         let loginUsername = username;
         let loginPassword = password;
         
         if (isAdminLogin) {
-            // Mapping dropdown selections to the newly seeded admin usernames
             if (level === 'All' && department === 'All') {
                 loginUsername = 'admin';
                 loginPassword = 'adminpassword';
@@ -30,28 +31,69 @@ function Login({ onLogin }) {
 
         try {
             const data = await apiLogin(loginUsername, loginPassword);
-            // We no longer manually overwrite level/department.
-            // data.department and data.level come directly from the DB auth route.
             onLogin(data);
         } catch (err) {
             setError(err.message + (isAdminLogin ? " (Note: Make sure the specific Admin account for this department/level is seeded in DB)" : ""));
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <div className="login-container">
-            <div className="login-box">
+        <div className="login-page">
+            {/* Animated background shapes */}
+            <div className="login-bg">
+                <div className="bg-shape bg-shape-1"></div>
+                <div className="bg-shape bg-shape-2"></div>
+                <div className="bg-shape bg-shape-3"></div>
+                <div className="bg-orb bg-orb-1"></div>
+                <div className="bg-orb bg-orb-2"></div>
+            </div>
+
+            <div className="login-card">
                 <div className="login-header">
+                    <div className="login-logo">
+                        <svg width="32" height="42" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 0C5.373 0 0 5.373 0 12v8c0 6.627 5.373 12 12 12s12-5.373 12-12V12c0-6.627-5.373-12-12-12zm-3 8c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.343-3 3-3zm6 16c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z" fill="url(#loginLogoGrad)" />
+                            <defs>
+                                <linearGradient id="loginLogoGrad" x1="0" y1="0" x2="24" y2="32" gradientUnits="userSpaceOnUse">
+                                    <stop stopColor="#8b5cf6" />
+                                    <stop offset="1" stopColor="#06b6d4" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
                     <h1 className="login-title">UrbanEye</h1>
                     <p className="login-subtitle">Sign in to your account</p>
                 </div>
+
                 <form onSubmit={handleSubmit} className="login-form">
-                    <div className="role-toggle" style={{display: 'flex', justifyContent: 'center', marginBottom: '20px', gap: '10px'}}>
-                        <button type="button" onClick={() => setIsAdminLogin(false)} style={{padding: '8px 16px', borderRadius: '20px', border: '1px solid #ddd', background: !isAdminLogin ? '#8b00cc' : 'transparent', color: !isAdminLogin ? 'white' : '#333', cursor: 'pointer', fontWeight: 'bold'}}>User</button>
-                        <button type="button" onClick={() => setIsAdminLogin(true)} style={{padding: '8px 16px', borderRadius: '20px', border: '1px solid #ddd', background: isAdminLogin ? '#8b00cc' : 'transparent', color: isAdminLogin ? 'white' : '#333', cursor: 'pointer', fontWeight: 'bold'}}>Admin</button>
+                    <div className="role-toggle">
+                        <button
+                            type="button"
+                            className={`role-btn ${!isAdminLogin ? 'active' : ''}`}
+                            onClick={() => setIsAdminLogin(false)}
+                        >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            User
+                        </button>
+                        <button
+                            type="button"
+                            className={`role-btn ${isAdminLogin ? 'active' : ''}`}
+                            onClick={() => setIsAdminLogin(true)}
+                        >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 15v2m-6 4h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2zm10-10V7a4 4 0 0 0-8 0v4"/></svg>
+                            Admin
+                        </button>
                     </div>
 
-                    {error && <div style={{ color: '#ff4444', marginBottom: '15px', textAlign:'center', backgroundColor: '#ffecec', padding:'10px', borderRadius:'8px', fontSize: '0.9rem' }}>{error}</div>}
+                    {error && (
+                        <div className="error-message">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                            {error}
+                        </div>
+                    )}
+
                     <div className="input-group">
                         <label>Username</label>
                         <input
@@ -60,7 +102,7 @@ function Login({ onLogin }) {
                             onChange={(e) => setUsername(e.target.value)}
                             required
                             placeholder="e.g. user1, admin"
-                            style={{ width: '100%', padding: '12px', marginTop: '8px', boxSizing: 'border-box', border: '1px solid #ddd', borderRadius: '8px' }}
+                            className="login-input"
                         />
                     </div>
                     <div className="input-group slide-down">
@@ -71,7 +113,7 @@ function Login({ onLogin }) {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                             placeholder="e.g. pass1, adminpassword"
-                            style={{ width: '100%', padding: '12px', marginTop: '8px', boxSizing: 'border-box', border: '1px solid #ddd', borderRadius: '8px' }}
+                            className="login-input"
                         />
                     </div>
                     
@@ -82,7 +124,7 @@ function Login({ onLogin }) {
                                 <select 
                                     value={level} 
                                     onChange={(e) => setLevel(e.target.value)}
-                                    style={{ width: '100%', padding: '12px', marginTop: '8px', boxSizing: 'border-box', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: 'white' }}
+                                    className="login-input"
                                 >
                                     <option value="State">State</option>
                                     <option value="District">District</option>
@@ -94,7 +136,7 @@ function Login({ onLogin }) {
                                 <select 
                                     value={department} 
                                     onChange={(e) => setDepartment(e.target.value)}
-                                    style={{ width: '100%', padding: '12px', marginTop: '8px', boxSizing: 'border-box', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: 'white' }}
+                                    className="login-input"
                                 >
                                     <option value="All">All Departments</option>
                                     <option value="Health">Health</option>
@@ -107,13 +149,16 @@ function Login({ onLogin }) {
                         </>
                     )}
                     
-                    <button type="submit" className="login-submit-btn" style={{marginTop: '20px'}}>
-                        Sign In
+                    <button type="submit" className="login-submit-btn" disabled={isLoading}>
+                        {isLoading ? (
+                            <span className="btn-spinner"></span>
+                        ) : (
+                            'Sign In'
+                        )}
                     </button>
                     
-                    <div style={{marginTop: '20px', fontSize: '0.8rem', color: '#666', textAlign: 'center'}}>
-                        Simulate multiple users: <br/>
-                        <b>user1</b> (pass1) • <b>user2</b> (pass2) • <b>admin</b> (adminpassword)
+                    <div className="login-hint">
+                        Demo credentials: <strong>user1</strong> (pass1) • <strong>user2</strong> (pass2) • <strong>admin</strong> (adminpassword)
                     </div>
                 </form>
             </div>

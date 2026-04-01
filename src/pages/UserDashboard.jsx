@@ -5,7 +5,7 @@ import Fab from '../components/Fab';
 import ComplaintModal from '../components/ComplaintModal';
 import ComplaintDetailModal from '../components/ComplaintDetailModal';
 
-function UserDashboard({ complaints, onAddComplaint, activeTab, onTabChange }) {
+function UserDashboard({ complaints, onAddComplaint, activeTab, onTabChange, onLogout }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedComplaint, setSelectedComplaint] = useState(null);
 
@@ -19,7 +19,7 @@ function UserDashboard({ complaints, onAddComplaint, activeTab, onTabChange }) {
 
     return (
         <>
-            <Header activeTab={activeTab} onTabChange={onTabChange} />
+            <Header activeTab={activeTab} onTabChange={onTabChange} onLogout={onLogout} />
 
             <main className="main-content">
                 {activeTab === 'complaints' ? (

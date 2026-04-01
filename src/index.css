@@ -1,15 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg-color: #383838;
-  --card-bg: #ffffff;
-  --text-main: #1a1a1a;
-  --text-muted: #666666;
-  --purple-accent: #8b00cc;
-  --purple-hover: #7a00b3;
-  --card-placeholder: #d9d9d9;
+  /* Core Bright Theme */
+  --bg-primary: #f0f2f5;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-solid: #ffffff;
+  --bg-elevated: #f8f9fb;
+  --bg-input: #f5f7fa;
+
+  /* Glass Effects (light mode) */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-border-hover: rgba(139, 92, 246, 0.25);
+
+  /* Accent Colors */
+  --purple-accent: #7c3aed;
+  --purple-hover: #6d28d9;
+  --purple-glow: rgba(124, 58, 237, 0.15);
+  --cyan-accent: #0891b2;
+  --cyan-glow: rgba(8, 145, 178, 0.1);
+  --gradient-accent: linear-gradient(135deg, #7c3aed 0%, #0891b2 100%);
+  --gradient-accent-hover: linear-gradient(135deg, #6d28d9 0%, #0e7490 100%);
+
+  /* Text */
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-main: #1e293b;
+
+  /* Status Colors */
+  --success: #059669;
+  --success-bg: rgba(5, 150, 105, 0.1);
+  --warning: #d97706;
+  --warning-bg: rgba(217, 119, 6, 0.1);
+  --danger: #dc2626;
+  --danger-bg: rgba(220, 38, 38, 0.08);
+  --info: #2563eb;
+  --info-bg: rgba(37, 99, 235, 0.08);
+
+  /* Borders & Radii */
+  --border-subtle: rgba(0, 0, 0, 0.06);
   --border-radius-lg: 16px;
   --border-radius-md: 12px;
+  --border-radius-sm: 8px;
+  --border-radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 20px rgba(124, 58, 237, 0.08);
+
+  /* Legacy compat */
+  --card-bg: #ffffff;
+  --card-placeholder: #e2e8f0;
 }
 
 * {
@@ -19,10 +64,9 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  /* Adding a deep, rich gradient background for a modern feel */
-  background: linear-gradient(135deg, #1f1f1f 0%, #383838 50%, #2a2a2a 100%);
-  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -32,18 +76,13 @@ body {
 
 #root {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   height: calc(100vh - 30px);
   min-height: 500px;
-
-  /* Slightly translucent background to let the body gradient subtly influence the card edges */
-  background-color: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
   border-radius: var(--border-radius-lg);
-  /* Soft outer drop-shadow + subtle inner highlight for depth (glassmorphism/neumorphism blend) */
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -51,31 +90,23 @@ body {
 }
 
 @media (max-width: 768px) {
-  body {
-    padding: 8px;
-    /* Even smaller padding on mobile */
-  }
-
+  body { padding: 8px; }
   #root {
     height: calc(100vh - 16px);
     border-radius: var(--border-radius-md);
   }
 }
 
-/* Scrollbar styling for a premium feel */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: #cccccc;
-  border-radius: 4px;
+  background: #cbd5e1;
+  border-radius: 3px;
 }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #aaaaaa;
+::selection {
+  background: rgba(124, 58, 237, 0.15);
+  color: var(--text-primary);
 }
